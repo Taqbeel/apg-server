@@ -1,7 +1,7 @@
 const db = require('../models/');
 const axios = require('axios');
 const qs = require('qs');
-const { AMZ_REFRESH_URL, AMZ_ID_1, AMZ_REFRESH_TOKEN_1, AMZ_CLIENT_ID_1, AMZ_CLIENT_SECRET_1, AMZ_ID_2, AMZ_REFRESH_TOKEN_2, AMZ_CLIENT_ID_2, AMZ_CLIENT_SECRET_2 } = require('../config/config');
+const { AMZ_REFRESH_URL, AMZ_ID_1, AMZ_REFRESH_TOKEN_1, AMZ_CLIENT_ID_1, AMZ_CLIENT_SECRET_1, AMZ_ID_2, AMZ_REFRESH_TOKEN_2, AMZ_CLIENT_ID_2, AMZ_CLIENT_SECRET_2, AMZ_CLIENT_SECRET_3, AMZ_CLIENT_ID_3, AMZ_REFRESH_TOKEN_3, AMZ_ID_3, AMZ_ID_4, AMZ_REFRESH_TOKEN_4, AMZ_CLIENT_ID_4, AMZ_CLIENT_SECRET_4 } = require('../config/config');
 
 
 const TOKENS = [
@@ -16,6 +16,18 @@ const TOKENS = [
     refresh_token: AMZ_REFRESH_TOKEN_2,
     client_id: AMZ_CLIENT_ID_2,
     client_secret: AMZ_CLIENT_SECRET_2,
+  },
+  {
+    id: AMZ_ID_3,
+    refresh_token: AMZ_REFRESH_TOKEN_3,
+    client_id: AMZ_CLIENT_ID_3,
+    client_secret: AMZ_CLIENT_SECRET_3,
+  },
+  {
+    id: AMZ_ID_4,
+    refresh_token: AMZ_REFRESH_TOKEN_4,
+    client_id: AMZ_CLIENT_ID_4,
+    client_secret: AMZ_CLIENT_SECRET_4,
   },
 ];
 
@@ -39,7 +51,6 @@ module.exports = amazonAuth = async () => {
       url: AMZ_REFRESH_URL,
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       data,
-
     };
 
     try {
