@@ -12,10 +12,22 @@ module.exports = {
     AMZ_REFRESH_TOKEN_1: process.env.AMZ_REFRESH_TOKEN_1,
     AMZ_CLIENT_ID_1: process.env.AMZ_CLIENT_ID_1,
     AMZ_CLIENT_SECRET_1: process.env.AMZ_CLIENT_SECRET_1,
+
     AMZ_ID_2: process.env.AMZ_ID_2,
     AMZ_REFRESH_TOKEN_2: process.env.AMZ_REFRESH_TOKEN_2,
     AMZ_CLIENT_ID_2: process.env.AMZ_CLIENT_ID_2,
     AMZ_CLIENT_SECRET_2: process.env.AMZ_CLIENT_SECRET_2,
+
+    AMZ_ID_3: process.env.AMZ_ID_3,
+    AMZ_REFRESH_TOKEN_3: process.env.AMZ_REFRESH_TOKEN_3,
+    AMZ_CLIENT_ID_3: process.env.AMZ_CLIENT_ID_3,
+    AMZ_CLIENT_SECRET_3: process.env.AMZ_CLIENT_SECRET_3,
+
+    AMZ_ID_4: process.env.AMZ_ID_4,
+    AMZ_REFRESH_TOKEN_4: process.env.AMZ_REFRESH_TOKEN_4,
+    AMZ_CLIENT_ID_4: process.env.AMZ_CLIENT_ID_4,
+    AMZ_CLIENT_SECRET_4: process.env.AMZ_CLIENT_SECRET_4,
+
     SELLING_URL: process.env.SELLING_URL,
     ALPHA_BRODER_URL: process.env.ALPHA_BRODER_URL,
     ALPHA_BRODER_URL_ONLINE: process.env.ALPHA_BRODER_URL_ONLINE,
