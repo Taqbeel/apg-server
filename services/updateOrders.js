@@ -2,10 +2,8 @@ const axios = require('axios');
 const db = require('../models');
 const { CronJob } = require('cron');
 const { OrderItems } = require("../associations/orderAssociations");
-
 const getRefreshToken = require("./getRefreshToken");
-const { stsAuth } = require('../controllers/auth.controllers');
-const { SELLING_URL, AMZ_ID_1, AMZ_ID_2 } = require('../config/config');
+const { SELLING_URL, AMZ_ID_1, AMZ_ID_2, AMZ_ID_3, AMZ_ID_4 } = require('../config/config');
 const delay = (n) => new Promise((resolve) => setTimeout(resolve, n));
 
 
@@ -23,7 +21,7 @@ const baseUrl = SELLING_URL
 let fetching = false
 // let accessToken = '';
 let currentTokenIndex = 0;
-const tokens = [AMZ_ID_1, AMZ_ID_2];
+const tokens = [AMZ_ID_1, AMZ_ID_2, AMZ_ID_3, AMZ_ID_4];
 
 const fetchDetails = CronJob.from({
   cronTime: '*/3 * * * * *',
@@ -51,7 +49,7 @@ const fetchDetails = CronJob.from({
           }
         };
 
-        console.log('config', config)
+        // console.log('config', config)
         console.log('result?.dataValues?.AmazonOrderId', result?.dataValues?.AmazonOrderId)
 
         // fetch Order Items
@@ -60,6 +58,8 @@ const fetchDetails = CronJob.from({
           url: `${baseUrl}/orders/v0/orders/${result?.dataValues?.AmazonOrderId}/orderItems`,
         }).then((orderItem) => {
           const items = orderItem?.data?.payload?.OrderItems;
+          console.log('items', items)
+          console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
           items.forEach(async (item) => {
             // console.log("Items Fetched")
             await delay(400);
@@ -109,6 +109,8 @@ const fetchDetails = CronJob.from({
             })
           })
         }).catch((err) => {
+          console.log('ERROR TOKEN', tokens[currentTokenIndex])
+          console.log('ERROR ACCESS TOKEN', accessToken)
           console.log('ERROROROROORORRORORO', err?.response?.data?.errors)
         })
         // }
@@ -170,9 +172,19 @@ module.exports = updateOrders = async () => {
 
   let temp = 0;
   await axios(orders).then(async (response) => {
+
+    console.log('orders response', response?.data?.payload)
+    console.log('__________________')
     const list = response?.data?.payload?.Orders;
     console.log('Orders Length ', list.length)
+    if (list.length == 0) {
+      fetchDetails.start();
+    }
     list.forEach(async (order, index) => {
+
+      console.log('index', index)
+      console.log('index === list.length - 1 && !fetching', !fetching, index === list.length - 1 && !fetching)
+      console.log('list and index', list.length, index, index === list.length - 1)
       let tempData = { ...order };
       delete tempData.BuyerInfo
       await db.Orders.upsert(parseOrder(tempData))
@@ -187,9 +199,9 @@ module.exports = updateOrders = async () => {
               fetching = true
             }
           }
-          // else if (index === list.length - 1) {
-          //   currentTokenIndex = (currentTokenIndex + 1) % tokens.length;
-          // }
+          else if (index === list.length - 1 && !fetching) {
+            fetchDetails.start();
+          }
         })
     });
   }).catch(function (error) {
