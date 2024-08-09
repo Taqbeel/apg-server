@@ -157,16 +157,16 @@ module.exports = updateOrders = async () => {
   const parseOrder = (orderData) => {
     return {
       ...orderData,
-      BuyerInfo: orderData.BuyerInfo ? orderData.BuyerInfo : null,
-      // OrderTotal:orderData.OrderTotal?JSON.stringify(orderData.OrderTotal):null,
-      Amount: orderData.OrderTotal.Amount,
-      CurrencyCode: orderData.OrderTotal.CurrencyCode,
-      PaymentMethodDetails: orderData.PaymentMethodDetails ? orderData.PaymentMethodDetails : null,
-      EarliestDeliveryDate: orderData.EarliestDeliveryDate ? new Date(orderData.EarliestDeliveryDate) : null,
-      EarliestShipDate: orderData.EarliestShipDate ? new Date(orderData.EarliestShipDate) : null,
-      PurchaseDate: orderData.PurchaseDate ? new Date(orderData.PurchaseDate) : null,
-      LatestDeliveryDate: orderData.LatestDeliveryDate ? new Date(orderData.LatestDeliveryDate) : null,
-      LatestShipDate: orderData.LatestShipDate ? new Date(orderData.LatestShipDate) : null,
+      BuyerInfo: orderData?.BuyerInfo ? orderData?.BuyerInfo : null,
+      // OrderTotal:orderData?.OrderTotal?JSON.stringify(orderData?.OrderTotal):null,
+      Amount: orderData?.OrderTotal?.Amount,
+      CurrencyCode: orderData?.OrderTotal?.CurrencyCode,
+      PaymentMethodDetails: orderData?.PaymentMethodDetails ? orderData?.PaymentMethodDetails : null,
+      EarliestDeliveryDate: orderData?.EarliestDeliveryDate ? new Date(orderData?.EarliestDeliveryDate) : null,
+      EarliestShipDate: orderData?.EarliestShipDate ? new Date(orderData?.EarliestShipDate) : null,
+      PurchaseDate: orderData?.PurchaseDate ? new Date(orderData?.PurchaseDate) : null,
+      LatestDeliveryDate: orderData?.LatestDeliveryDate ? new Date(orderData?.LatestDeliveryDate) : null,
+      LatestShipDate: orderData?.LatestShipDate ? new Date(orderData?.LatestShipDate) : null,
     }
   };
 
