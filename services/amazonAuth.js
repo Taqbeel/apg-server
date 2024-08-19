@@ -23,12 +23,12 @@ const TOKENS = [
     client_id: AMZ_CLIENT_ID_3,
     client_secret: AMZ_CLIENT_SECRET_3,
   },
-  {
-    id: AMZ_ID_4,
-    refresh_token: AMZ_REFRESH_TOKEN_4,
-    client_id: AMZ_CLIENT_ID_4,
-    client_secret: AMZ_CLIENT_SECRET_4,
-  },
+  // {
+  //   id: AMZ_ID_4,
+  //   refresh_token: AMZ_REFRESH_TOKEN_4,
+  //   client_id: AMZ_CLIENT_ID_4,
+  //   client_secret: AMZ_CLIENT_SECRET_4,
+  // },
 ];
 
 
@@ -58,11 +58,17 @@ module.exports = amazonAuth = async () => {
       await db.Tokens.update({ access_token: res.data.access_token }, { where: { id: token.id } });
       console.log(`Updated access token for token ID ${token.id}`);
     } catch (error) {
-      console.error(`Error refreshing token for ID ${token.id}`, error);
+      console.error(`Error refreshing token for ID ${token.id}`, error?.response?.data);
     }
   });
 
-  await Promise.all(promises);
+  try {
+
+    await Promise.all(promises);
+
+  } catch (error) {
+    console.error(`Error refreshing tokens`, error?.response?.data);
+  }
 
 
 

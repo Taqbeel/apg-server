@@ -21,7 +21,8 @@ const baseUrl = SELLING_URL
 let fetching = false
 // let accessToken = '';
 let currentTokenIndex = 0;
-const tokens = [AMZ_ID_1, AMZ_ID_2, AMZ_ID_3, AMZ_ID_4];
+// const tokens = [AMZ_ID_1, AMZ_ID_2, AMZ_ID_3, AMZ_ID_4];
+const tokens = [AMZ_ID_1, AMZ_ID_2, AMZ_ID_3];
 
 const fetchDetails = CronJob.from({
   cronTime: '*/3 * * * * *',
@@ -155,6 +156,8 @@ module.exports = updateOrders = async () => {
   };
 
   const parseOrder = (orderData) => {
+
+    const vendorName = currentTokenIndex === 0 ? 'High End Fashion' : currentTokenIndex === 1 ? 'Hejaz Inc' : currentTokenIndex === 2 ? 'Five Pellars' : currentTokenIndex === 3 ? 'Shipping Guru' : ''
     return {
       ...orderData,
       BuyerInfo: orderData?.BuyerInfo ? orderData?.BuyerInfo : null,
@@ -167,6 +170,7 @@ module.exports = updateOrders = async () => {
       PurchaseDate: orderData?.PurchaseDate ? new Date(orderData?.PurchaseDate) : null,
       LatestDeliveryDate: orderData?.LatestDeliveryDate ? new Date(orderData?.LatestDeliveryDate) : null,
       LatestShipDate: orderData?.LatestShipDate ? new Date(orderData?.LatestShipDate) : null,
+      vendorName,
     }
   };
 
