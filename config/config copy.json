@@ -1,0 +1,26 @@
+{
+    "development": {
+      "username": "apgs-server-2.0",
+      "password": "Lumia@520",
+      "database": "admin_",
+      "port":"3306",
+      "host": "apgactdom.apparelglobe.com",
+      "dialect": "mysql"
+    },
+    "test": {
+      "username": "apgs-server-2.0",
+      "password": "Lumia@520",
+      "database": "admin_",
+      "port":"3306",
+      "host": "apgactdom.apparelglobe.com",
+      "dialect": "mysql"
+    },
+    "production": {
+      "username": "apgs-server-2.0",
+      "password": "Lumia@520",
+      "database": "admin_",
+      "port":"3306",
+      "host": "apgactdom.apparelglobe.com",
+      "dialect": "mysql"
+    }
+  }

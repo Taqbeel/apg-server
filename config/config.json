@@ -1,26 +1,26 @@
 {
     "development": {
-      "username": "apgs-server-2.0",
-      "password": "Lumia@520",
-      "database": "admin_",
-      "port":"3306",
-      "host": "apgactdom.apparelglobe.com",
-      "dialect": "mysql"
+      "username": "postgres",
+      "password": "1234",
+      "database": "apg",
+      "port":"5432",
+      "host": "localhost",
+      "dialect": "postgres"
     },
     "test": {
-      "username": "apgs-server-2.0",
-      "password": "Lumia@520",
-      "database": "admin_",
-      "port":"3306",
-      "host": "apgactdom.apparelglobe.com",
-      "dialect": "mysql"
+      "username": "postgres",
+      "password": "1234",
+      "database": "apg",
+      "port":"5432",
+      "host": "localhost",
+      "dialect": "postgres"
     },
     "production": {
-      "username": "apgs-server-2.0",
-      "password": "Lumia@520",
-      "database": "admin_",
-      "port":"3306",
-      "host": "apgactdom.apparelglobe.com",
-      "dialect": "mysql"
+      "username": "postgres",
+      "password": "1234",
+      "database": "apg",
+      "port":"5432",
+      "host": "localhost",
+      "dialect": "postgres"
     }
   }
