@@ -5,6 +5,7 @@ const path = require('path');
 const Sequelize = require('sequelize-cockroachdb');
 const process = require('process');
 const { DB_URL } = require('../config/config');
+const config = require('../config/config.json');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 const db = {};
@@ -18,6 +19,11 @@ sequelize = new Sequelize(connectionString, {
   },
   logging: false
 });
+
+// sequelize.sync({ alter: true }).then(() => {
+//   console.log("Database & tables updated!");
+// });
+
 
 fs
   .readdirSync(__dirname)
