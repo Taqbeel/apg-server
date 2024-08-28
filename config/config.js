@@ -1,6 +1,30 @@
 const dotenv = require('dotenv');
 dotenv.config();
 module.exports = {
+    development: {
+        username: 'postgres',
+        password: 1234,
+        database: 'apg',
+        port: 5432,
+        host: 'localhost',
+        dialect: 'postgres'
+    },
+    test: {
+        username: 'postgres',
+        password: 1234,
+        database: 'apg',
+        port: 5432,
+        host: 'localhost',
+        dialect: 'postgres'
+    },
+    production: {
+        username: 'postgres',
+        password: 1234,
+        database: 'apg',
+        port: 5432,
+        host: 'localhost',
+        dialect: 'postgres'
+    },
     HOST_PORT: process.env.HOST_PORT,
     DB_URL: process.env.DB_URL,
     CONFIG_SERVER: process.env.CONFIG_SERVER,
@@ -8,22 +32,27 @@ module.exports = {
     CONFIG_PASS: process.env.CONFIG_PASS,
     CONFIG_DB_NAME: process.env.CONFIG_DB_NAME,
     AMZ_REFRESH_URL: process.env.AMZ_REFRESH_URL,
+
     AMZ_ID_1: process.env.AMZ_ID_1,
+    AMZ_NAME_1: process.env.AMZ_NAME_1,
     AMZ_REFRESH_TOKEN_1: process.env.AMZ_REFRESH_TOKEN_1,
     AMZ_CLIENT_ID_1: process.env.AMZ_CLIENT_ID_1,
     AMZ_CLIENT_SECRET_1: process.env.AMZ_CLIENT_SECRET_1,
 
     AMZ_ID_2: process.env.AMZ_ID_2,
+    AMZ_NAME_2: process.env.AMZ_NAME_2,
     AMZ_REFRESH_TOKEN_2: process.env.AMZ_REFRESH_TOKEN_2,
     AMZ_CLIENT_ID_2: process.env.AMZ_CLIENT_ID_2,
     AMZ_CLIENT_SECRET_2: process.env.AMZ_CLIENT_SECRET_2,
 
     AMZ_ID_3: process.env.AMZ_ID_3,
+    AMZ_NAME_3: process.env.AMZ_NAME_3,
     AMZ_REFRESH_TOKEN_3: process.env.AMZ_REFRESH_TOKEN_3,
     AMZ_CLIENT_ID_3: process.env.AMZ_CLIENT_ID_3,
     AMZ_CLIENT_SECRET_3: process.env.AMZ_CLIENT_SECRET_3,
 
     AMZ_ID_4: process.env.AMZ_ID_4,
+    AMZ_NAME_1: process.env.AMZ_NAME_1,
     AMZ_REFRESH_TOKEN_4: process.env.AMZ_REFRESH_TOKEN_4,
     AMZ_CLIENT_ID_4: process.env.AMZ_CLIENT_ID_4,
     AMZ_CLIENT_SECRET_4: process.env.AMZ_CLIENT_SECRET_4,
