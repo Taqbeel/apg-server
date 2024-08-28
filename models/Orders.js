@@ -16,6 +16,8 @@ module.exports = (sequelize, DataTypes) => {
     OrderType: { type: DataTypes.STRING },
 
     BuyerInfo: { type: DataTypes.JSON },
+    BuyerAddress: { type: DataTypes.JSON },
+    DefaultShipFromLocationAddress: { type: DataTypes.JSON },
     OrderTotal: { type: DataTypes.JSON },
     PaymentMethodDetails: { type: DataTypes.JSON },
     AutomatedShippingSettings: { type: DataTypes.JSON },
