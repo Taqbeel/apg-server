@@ -1,22 +1,61 @@
 const db = require("../models");
 const { Orders, OrderItems, OrderShipment } = require("../associations/orderAssociations")
 const updateOrders = require("../services/updateOrders")
+// const updateOrders1 = require("../services/updateOrders-1")
+// const updateOrders2 = require("../services/updateOrders-2")
+// const updateOrders3 = require("../services/updateOrders-3")
 const { Op } = require('sequelize');
 const updateManualOrders = require("../services/updateManualOrders")
 
 
 exports.updateOrders = (req, res) => {
   updateOrders();
+  // updateOrders1();
+  // updateOrders2();
+  // updateOrders3();
   return res.json({
     status: "done"
   });
 };
 
 exports.getOrders = (req, res) => {
+  const { orderId, orderStatus, orderType } = req.query;
+
+  console.log('orderId', orderId)
+  console.log('orderStatus', orderStatus)
+  console.log('orderType', orderType)
+  let where = {};
+
+  if (orderId) {
+    where.AmazonOrderId = {
+      [Op.like]: `%${orderId}%`
+    };
+  }
+
+  if (orderType) {
+    where.OrderType = {
+      [Op.iLike]: `%${orderType}%`
+    };
+  }
+
+  if (orderStatus) {
+    where.OrderStatus = {
+      [Op.iLike]: `%${orderStatus}%`
+    };
+  } else {
+    where.OrderStatus = {
+      [Op.or]: ['Shipped', 'Unshipped'],
+    };
+  }
+
+  console.log('where', where)
+
+
   db.Orders.findAll({
-    where: {
-      [Op.or]: [{ OrderStatus: 'Shipped' }, { OrderStatus: 'Unshipped' }],
-    },
+    // where: {
+    //   [Op.or]: [{ OrderStatus: 'Shipped' }, { OrderStatus: 'Unshipped' }],
+    // },
+    where,
     include: [
       { model: OrderItems },
       {
