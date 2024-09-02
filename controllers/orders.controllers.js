@@ -19,11 +19,9 @@ exports.updateOrders = (req, res) => {
 };
 
 exports.getOrders = (req, res) => {
-  const { orderId, orderStatus, orderType } = req.query;
+  const { orderId, orderStatus, orderType, vendorName } = req.query;
 
-  console.log('orderId', orderId)
-  console.log('orderStatus', orderStatus)
-  console.log('orderType', orderType)
+
   let where = {};
 
   if (orderId) {
@@ -38,6 +36,12 @@ exports.getOrders = (req, res) => {
     };
   }
 
+  if (vendorName) {
+    where.vendorName = {
+      [Op.iLike]: `%${vendorName}%`
+    };
+  }
+
   if (orderStatus) {
     where.OrderStatus = {
       [Op.iLike]: `%${orderStatus}%`
@@ -48,13 +52,7 @@ exports.getOrders = (req, res) => {
     };
   }
 
-  console.log('where', where)
-
-
   db.Orders.findAll({
-    // where: {
-    //   [Op.or]: [{ OrderStatus: 'Shipped' }, { OrderStatus: 'Unshipped' }],
-    // },
     where,
     include: [
       { model: OrderItems },
