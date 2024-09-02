@@ -3,16 +3,21 @@ const { Users, Orders, OrderItems, OrderShipment } = require("../associations/or
 const getRefreshToken = require("../services/getRefreshToken");
 const axios = require("axios");
 const { Op } = require('sequelize');
-const { SELLING_URL } = require("../config/config");
+const { SELLING_URL, AMZ_ID_1 } = require("../config/config");
 
 const baseUrl = SELLING_URL
 
 const delay = (n) => new Promise((resolve) => setTimeout(resolve, n));
 
 exports.fetchRates = async (req, res) => {
-  const tokenData = await getRefreshToken();
+
+  const { vendorName, body } = req.body
+
+  const id = vendorName === 'HIGH END FASHION' ? 1 : vendorName === 'Hejaz NJ' ? 2 : vendorName === 'Five Pillar NJ' ? 3 : vendorName === 'Shipping Guru LLC' ? 4 : 5
+
+  const tokenData = await getRefreshToken(id);
   const data = JSON.stringify({
-    ...req.body
+    ...body
   });
 
   const config = {
