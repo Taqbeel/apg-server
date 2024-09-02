@@ -3,7 +3,7 @@ const db = require('../models');
 const { CronJob } = require('cron');
 const { OrderItems } = require("../associations/orderAssociations");
 const getRefreshToken = require("./getRefreshToken");
-const { SELLING_URL, AMZ_ID_1, AMZ_ID_2, AMZ_ID_3, AMZ_ID_4, AMZ_NAME_1, AMZ_NAME_2, AMZ_NAME_3 } = require('../config/config');
+const { SELLING_URL, AMZ_ID_1, AMZ_ID_2, AMZ_ID_3, AMZ_ID_4, AMZ_NAME_1, AMZ_NAME_2, AMZ_NAME_3, AMZ_NAME_4 } = require('../config/config');
 const delay = (n) => new Promise((resolve) => setTimeout(resolve, n));
 
 
@@ -21,9 +21,9 @@ const baseUrl = SELLING_URL
 let fetching = false
 let currentTokenIndex = 0;
 // const tokens = [AMZ_ID_1, AMZ_ID_2, AMZ_ID_3, AMZ_ID_4];
-const tokens = [AMZ_ID_1, AMZ_ID_2, AMZ_ID_3];
+const tokens = [AMZ_ID_1, AMZ_ID_2, AMZ_ID_3, AMZ_ID_4];
 // const tokens = [AMZ_ID_1];
-const names = [AMZ_NAME_1, AMZ_NAME_2, AMZ_NAME_3];
+const names = [AMZ_NAME_1, AMZ_NAME_2, AMZ_NAME_3, AMZ_NAME_4];
 // const names = [AMZ_NAME_1];
 
 const fetchDetails = CronJob.from({
@@ -170,6 +170,7 @@ module.exports = updateOrders = async () => {
     const list = response?.data?.payload?.Orders;
     console.log('Orders Length ', list.length)
     if (list.length == 0) {
+      console.log('list.length', list.length)
       fetchDetails.start();
     }
     list.forEach(async (order, index) => {
