@@ -52,7 +52,7 @@ module.exports = {
     AMZ_CLIENT_SECRET_3: process.env.AMZ_CLIENT_SECRET_3,
 
     AMZ_ID_4: process.env.AMZ_ID_4,
-    AMZ_NAME_1: process.env.AMZ_NAME_1,
+    AMZ_NAME_4: process.env.AMZ_NAME_4,
     AMZ_REFRESH_TOKEN_4: process.env.AMZ_REFRESH_TOKEN_4,
     AMZ_CLIENT_ID_4: process.env.AMZ_CLIENT_ID_4,
     AMZ_CLIENT_SECRET_4: process.env.AMZ_CLIENT_SECRET_4,
