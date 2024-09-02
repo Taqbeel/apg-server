@@ -23,22 +23,16 @@ const TOKENS = [
     client_id: AMZ_CLIENT_ID_3,
     client_secret: AMZ_CLIENT_SECRET_3,
   },
-  // {
-  //   id: AMZ_ID_4,
-  //   refresh_token: AMZ_REFRESH_TOKEN_4,
-  //   client_id: AMZ_CLIENT_ID_4,
-  //   client_secret: AMZ_CLIENT_SECRET_4,
-  // },
+  {
+    id: AMZ_ID_4,
+    refresh_token: AMZ_REFRESH_TOKEN_4,
+    client_id: AMZ_CLIENT_ID_4,
+    client_secret: AMZ_CLIENT_SECRET_4,
+  },
 ];
 
 
 module.exports = amazonAuth = async () => {
-
-
-
-
-
-
   const promises = TOKENS.map(async (token) => {
     const data = qs.stringify({
       grant_type: 'refresh_token',
@@ -63,14 +57,10 @@ module.exports = amazonAuth = async () => {
   });
 
   try {
-
     await Promise.all(promises);
-
   } catch (error) {
     console.error(`Error refreshing tokens`, error?.response?.data);
   }
-
-
 
   return {}
 }
