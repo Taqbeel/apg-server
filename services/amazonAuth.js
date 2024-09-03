@@ -1,30 +1,34 @@
 const db = require('../models/');
 const axios = require('axios');
 const qs = require('qs');
-const { AMZ_REFRESH_URL, AMZ_ID_1, AMZ_REFRESH_TOKEN_1, AMZ_CLIENT_ID_1, AMZ_CLIENT_SECRET_1, AMZ_ID_2, AMZ_REFRESH_TOKEN_2, AMZ_CLIENT_ID_2, AMZ_CLIENT_SECRET_2, AMZ_CLIENT_SECRET_3, AMZ_CLIENT_ID_3, AMZ_REFRESH_TOKEN_3, AMZ_ID_3, AMZ_ID_4, AMZ_REFRESH_TOKEN_4, AMZ_CLIENT_ID_4, AMZ_CLIENT_SECRET_4 } = require('../config/config');
+const { AMZ_REFRESH_URL, AMZ_ID_1, AMZ_REFRESH_TOKEN_1, AMZ_CLIENT_ID_1, AMZ_CLIENT_SECRET_1, AMZ_ID_2, AMZ_REFRESH_TOKEN_2, AMZ_CLIENT_ID_2, AMZ_CLIENT_SECRET_2, AMZ_CLIENT_SECRET_3, AMZ_CLIENT_ID_3, AMZ_REFRESH_TOKEN_3, AMZ_ID_3, AMZ_ID_4, AMZ_REFRESH_TOKEN_4, AMZ_CLIENT_ID_4, AMZ_CLIENT_SECRET_4, AMZ_NAME_1, AMZ_NAME_2, AMZ_NAME_3, AMZ_NAME_4 } = require('../config/config');
 
 
 const TOKENS = [
   {
     id: AMZ_ID_1,
+    vendorName: AMZ_NAME_1,
     refresh_token: AMZ_REFRESH_TOKEN_1,
     client_id: AMZ_CLIENT_ID_1,
     client_secret: AMZ_CLIENT_SECRET_1,
   },
   {
     id: AMZ_ID_2,
+    vendorName: AMZ_NAME_2,
     refresh_token: AMZ_REFRESH_TOKEN_2,
     client_id: AMZ_CLIENT_ID_2,
     client_secret: AMZ_CLIENT_SECRET_2,
   },
   {
     id: AMZ_ID_3,
+    vendorName: AMZ_NAME_3,
     refresh_token: AMZ_REFRESH_TOKEN_3,
     client_id: AMZ_CLIENT_ID_3,
     client_secret: AMZ_CLIENT_SECRET_3,
   },
   {
     id: AMZ_ID_4,
+    vendorName: AMZ_NAME_4,
     refresh_token: AMZ_REFRESH_TOKEN_4,
     client_id: AMZ_CLIENT_ID_4,
     client_secret: AMZ_CLIENT_SECRET_4,
@@ -49,8 +53,8 @@ module.exports = amazonAuth = async () => {
 
     try {
       const res = await axios(config);
-      await db.Tokens.update({ access_token: res.data.access_token }, { where: { id: token.id } });
-      console.log(`Updated access token for token ID ${token.id}`);
+      await db.Tokens.update({ access_token: res.data.access_token }, { where: { vendorName: token.vendorName } });
+      console.log(`Updated access token for token ${token.vendorName}`);
     } catch (error) {
       console.error(`Error refreshing token for ID ${token.id}`, error?.response?.data);
     }

@@ -1,15 +1,8 @@
 const db = require('../models');
 
-module.exports = getRefreshToken = async (token) => {
-  let result
-  await db.Tokens.findOne({
-    where: {
-      id: token
-    },
+module.exports = getRefreshToken = async (vendorName) => {
+  return await db.Tokens.findOne({
+    where: { vendorName },
     attributes: ['access_token']
-  }).then((x) => {
-    result = x
   })
-
-  return result
 }

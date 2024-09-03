@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
         refresh_token: {
             type: DataTypes.TEXT,
             allowNull: false,
+            unique: true,
             validate: {
                 notEmpty: true
             }

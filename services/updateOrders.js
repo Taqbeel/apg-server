@@ -19,12 +19,10 @@ job.start();
 const baseUrl = SELLING_URL
 
 let fetching = false
-let currentTokenIndex = 0;
+let currentNameIndex = 0;
+
 // const tokens = [AMZ_ID_1, AMZ_ID_2, AMZ_ID_3, AMZ_ID_4];
-const tokens = [AMZ_ID_1, AMZ_ID_2, AMZ_ID_3, AMZ_ID_4];
-// const tokens = [AMZ_ID_1];
 const names = [AMZ_NAME_1, AMZ_NAME_2, AMZ_NAME_3, AMZ_NAME_4];
-// const names = [AMZ_NAME_1];
 
 const fetchDetails = CronJob.from({
   cronTime: '*/3 * * * * *',
@@ -36,12 +34,12 @@ const fetchDetails = CronJob.from({
       const result = await db.Orders.findOne({
         where: {
           itemsFetched: false,
-          vendorName: names[currentTokenIndex]
+          vendorName: names[currentNameIndex]
         }
       });
       if (result?.dataValues?.id) {
 
-        const data = await getRefreshToken(tokens[currentTokenIndex]);
+        const data = await getRefreshToken(names[currentNameIndex]);
         const accessToken = data?.dataValues?.access_token
 
         console.log('result?.dataValues?.AmazonOrderId', result?.dataValues?.AmazonOrderId)
@@ -107,23 +105,23 @@ const fetchDetails = CronJob.from({
 
 
           }).catch((err) => {
-            console.log('ERROR TOKEN', tokens[currentTokenIndex])
+            console.log('ERROR VENDOR', names[currentNameIndex])
             console.log('ERROR ACCESS TOKEN', accessToken)
             console.log('ERROROROROORORRORORO', err?.response?.data?.errors)
           })
       }
-    } else if (currentTokenIndex < tokens.length - 1) {
-      console.log("currentTokenIndex < tokens.length", currentTokenIndex < tokens.length)
-      console.log("Job Stopped for ", currentTokenIndex)
+    } else if (currentNameIndex < names.length - 1) {
+      console.log("currentNameIndex < names.length", currentNameIndex < names.length)
+      console.log("Job Stopped for ", currentNameIndex)
       fetchDetails.stop();
       fetching = false;
-      currentTokenIndex = (currentTokenIndex + 1) % tokens.length;
+      currentNameIndex = (currentNameIndex + 1) % names.length;
       updateOrders();
     } else {
       console.log("Job Stopped")
       fetchDetails.stop();
       fetching = false
-      currentTokenIndex = 0
+      currentNameIndex = 0
     }
   },
   start: false,
@@ -132,8 +130,8 @@ const fetchDetails = CronJob.from({
 
 module.exports = updateOrders = async () => {
   console.log('updateOrders here.....')
-  console.log("currentTokenIndex===>>>>>>>", currentTokenIndex)
-  const data = await getRefreshToken(tokens[currentTokenIndex]);
+  console.log("currentNameIndex===>>>>>>>", currentNameIndex)
+  const data = await getRefreshToken(names[currentNameIndex]);
   const accessToken = data?.dataValues?.access_token
   console.log("accessToken", accessToken)
   console.log("_______________________________________________")
@@ -185,7 +183,7 @@ module.exports = updateOrders = async () => {
           if (x[0]?.dataValues.itemsFetched == false) {
             temp = temp + 1;
             if (temp == 1) {
-              console.log("Next Job Start For ", currentTokenIndex)
+              console.log("Next Job Start For ", currentNameIndex)
               fetchDetails.start();
               fetching = true
             }

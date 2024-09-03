@@ -13,9 +13,9 @@ exports.fetchRates = async (req, res) => {
 
   const { vendorName, body } = req.body
 
-  const id = vendorName === 'HIGH END FASHION' ? 1 : vendorName === 'Hejaz NJ' ? 2 : vendorName === 'Five Pillar NJ' ? 3 : vendorName === 'Shipping Guru LLC' ? 4 : 5
+  // const id = vendorName === 'HIGH END FASHION' ? 1 : vendorName === 'Hejaz NJ' ? 2 : vendorName === 'Five Pillar NJ' ? 3 : vendorName === 'Shipping Guru LLC' ? 4 : 5
 
-  const tokenData = await getRefreshToken(id);
+  const tokenData = await getRefreshToken(vendorName);
   const data = JSON.stringify({
     ...body
   });
