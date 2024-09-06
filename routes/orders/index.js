@@ -16,6 +16,9 @@ routes.get("/getOrderByAPI", ordersController.getOrderByAPI);
 // Assign Order to User
 routes.post("/assignOrder", ordersController.assignOrder);
 
+// Update order 
+routes.post("/orderToProcess", ordersController.orderToProcess);
+
 // updateOrders Unshipped Orders
 routes.post("/uploadManualOrders", ordersController.uploadManualOrders);
 
