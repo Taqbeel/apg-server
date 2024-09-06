@@ -58,6 +58,7 @@ module.exports = {
     AMZ_CLIENT_SECRET_4: process.env.AMZ_CLIENT_SECRET_4,
 
     SELLING_URL: process.env.SELLING_URL,
+    SELLING_URL_SB: process.env.SELLING_URL_SB,
     ALPHA_BRODER_URL: process.env.ALPHA_BRODER_URL,
     ALPHA_BRODER_URL_ONLINE: process.env.ALPHA_BRODER_URL_ONLINE,
     ALPHA_BRODER_URL_REQ: process.env.ALPHA_BRODER_URL_REQ,
