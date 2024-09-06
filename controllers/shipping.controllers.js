@@ -3,17 +3,15 @@ const { Users, Orders, OrderItems, OrderShipment } = require("../associations/or
 const getRefreshToken = require("../services/getRefreshToken");
 const axios = require("axios");
 const { Op } = require('sequelize');
-const { SELLING_URL, AMZ_ID_1 } = require("../config/config");
+const { SELLING_URL, AMZ_ID_1, SELLING_URL_SB } = require("../config/config");
 
-const baseUrl = SELLING_URL
+const baseUrl = SELLING_URL_SB
 
 const delay = (n) => new Promise((resolve) => setTimeout(resolve, n));
 
 exports.fetchRates = async (req, res) => {
 
   const { vendorName, body } = req.body
-
-  // const id = vendorName === 'HIGH END FASHION' ? 1 : vendorName === 'Hejaz NJ' ? 2 : vendorName === 'Five Pillar NJ' ? 3 : vendorName === 'Shipping Guru LLC' ? 4 : 5
 
   const tokenData = await getRefreshToken(vendorName);
   const data = JSON.stringify({
@@ -46,10 +44,12 @@ exports.fetchRates = async (req, res) => {
 };
 
 exports.purchaseShipment = async (req, res) => {
-  const tokenData = await getRefreshToken();
-  const data = JSON.stringify({
-    ...req.body.body
-  });
+  const { vendorName, body } = req.body
+
+  const tokenData = await getRefreshToken(vendorName);
+  // const data = JSON.stringify({
+  //   ...body
+  // });
 
   const config = {
     method: 'post',
@@ -59,7 +59,7 @@ exports.purchaseShipment = async (req, res) => {
       'x-amzn-shipping-business-id': 'AmazonShipping_US',
       'Content-Type': 'application/json'
     },
-    data: data
+    data: body
   };
 
   axios(config)
@@ -95,7 +95,7 @@ exports.purchaseShipment = async (req, res) => {
 exports.getLabel = async (req, res) => {
 
   OrderShipment.findOne({
-    attributes: ['document', 'format'],
+    // attributes: ['document', 'format'],
     where: {
       OrderId: req.body.id
     }
