@@ -160,17 +160,14 @@ exports.assignOrder = async (req, res) => {
   }
 };
 
-exports.orderToProcess = async (req, res) => {
+exports.orderStatusChange = async (req, res) => {
   try {
-    console.log('req.body.id:', req.body.id);
+    const { id, status } = req.body
     const result = await db.Orders.update({
-      OrderStatus: 'Inprocess'
+      OrderStatus: status
     }, {
-      where: { id: req.body.id }
+      where: { id }
     })
-
-
-    console.log('Rows updated:', result[0]); // Log the number of affected rows
 
     if (result[0] === 0) {
       return res.json({ status: "error", message: "No rows were updated. Check if the order is already in 'Inprocess' state or if the id is correct." });
