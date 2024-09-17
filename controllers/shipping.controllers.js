@@ -3,9 +3,10 @@ const { Users, Orders, OrderItems, OrderShipment } = require("../associations/or
 const getRefreshToken = require("../services/getRefreshToken");
 const axios = require("axios");
 const { Op } = require('sequelize');
-const { SELLING_URL, AMZ_ID_1, SELLING_URL_SB } = require("../config/config");
+const { SELLING_URL, SELLING_URL_SB } = require("../config/config");
 
-const baseUrl = SELLING_URL_SB
+// const baseUrl = SELLING_URL_SB
+const baseUrl = SELLING_URL
 
 const delay = (n) => new Promise((resolve) => setTimeout(resolve, n));
 
@@ -62,7 +63,7 @@ exports.purchaseShipment = async (req, res) => {
     data: body
   };
 
-  axios(config)
+  await axios(config)
     .then(function (response) {
       Orders.update({
         shipmentBought: true
@@ -87,8 +88,8 @@ exports.purchaseShipment = async (req, res) => {
       });
     })
     .catch(function (error) {
-      console.log(error.message);
-      res.json({ status: "error", result: error });
+      console.log('Purchase shipment error', error?.response?.data);
+      res.json({ status: "error", result: error?.response?.data?.errors[0] });
     });
 };
 
