@@ -30,7 +30,7 @@ exports.fetchRates = async (req, res) => {
     data: data
   };
 
-  axios(config)
+  await axios(config)
     .then(function (response) {
       res.json({
         status: "success",
@@ -39,7 +39,8 @@ exports.fetchRates = async (req, res) => {
     })
     .catch(function (error) {
       console.log(error.code);
-      res.json({ status: "error", result: JSON.stringify(error) });
+      console.log(error.response?.data);
+      res.json({ status: "error", result: error?.response?.data?.errors[0] });
     });
 
 };
@@ -95,7 +96,7 @@ exports.purchaseShipment = async (req, res) => {
 
 exports.getLabel = async (req, res) => {
 
-  OrderShipment.findOne({
+  await OrderShipment.findOne({
     // attributes: ['document', 'format'],
     where: {
       OrderId: req.body.id
