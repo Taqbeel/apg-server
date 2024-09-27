@@ -195,5 +195,7 @@ module.exports = updateOrders = async () => {
     });
   }).catch(function (error) {
     console.log(error?.response?.data);
+    currentNameIndex = (currentNameIndex + 1) % names.length;
+    updateOrders();
   });
 };
