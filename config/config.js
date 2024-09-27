@@ -2,28 +2,34 @@ const dotenv = require('dotenv');
 dotenv.config();
 module.exports = {
     development: {
-        username: process.env.POSTGRES_USER,
-        password: process.env.POSTGRES_PASSWORD,
-        database: process.env.POSTGRES_DB,
-        port: process.env.POSTGRES_PORT,
-        host: 'localhost',
-        dialect: process.env.POSTGRES_USER
+        use_env_variable: 'DB_URL',  // Use connection string from environment variables
+        dialect: 'postgres',
+        dialectOptions: {
+            ssl: {
+                require: true, // Require SSL for the connection
+                rejectUnauthorized: false // Allow self-signed certificates
+            }
+        }
     },
     test: {
-        username: process.env.POSTGRES_USER,
-        password: process.env.POSTGRES_PASSWORD,
-        database: process.env.POSTGRES_DB,
-        port: process.env.POSTGRES_PORT,
-        host: 'localhost',
-        dialect: process.env.POSTGRES_USER
+        use_env_variable: 'DB_URL',
+        dialect: 'postgres',
+        dialectOptions: {
+            ssl: {
+                require: true,
+                rejectUnauthorized: false
+            }
+        }
     },
     production: {
-        username: process.env.POSTGRES_USER,
-        password: process.env.POSTGRES_PASSWORD,
-        database: process.env.POSTGRES_DB,
-        port: process.env.POSTGRES_PORT,
-        host: 'localhost',
-        dialect: process.env.POSTGRES_USER
+        use_env_variable: 'DB_URL',
+        dialect: 'postgres',
+        dialectOptions: {
+            ssl: {
+                require: true,
+                rejectUnauthorized: false
+            }
+        }
     },
     HOST_PORT: process.env.HOST_PORT,
     DB_URL: process.env.DB_URL,
