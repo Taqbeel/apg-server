@@ -3,12 +3,13 @@ const db = require('../models');
 const { CronJob } = require('cron');
 const { OrderItems } = require("../associations/orderAssociations");
 const getRefreshToken = require("./getRefreshToken");
-const { SELLING_URL, AMZ_ID_1, AMZ_ID_2, AMZ_ID_3, AMZ_ID_4, AMZ_NAME_1, AMZ_NAME_2, AMZ_NAME_3, AMZ_NAME_4 } = require('../config/config');
+const { SELLING_URL, AMZ_NAME_1, AMZ_NAME_2, AMZ_NAME_3, AMZ_NAME_4 } = require('../config/config');
+const processOrders = require('./vnOrders');
 const delay = (n) => new Promise((resolve) => setTimeout(resolve, n));
 
 
 const job = new CronJob('0 */30 * * * *', async () => {
-  console.log('You will see this message every minute');
+  console.log('You will see this message every 30 minutes');
   await amazonAuth().then(() => { })
   await updateOrders()
 }, null, true, 'system');
@@ -21,7 +22,6 @@ const baseUrl = SELLING_URL
 let fetching = false
 let currentNameIndex = 0;
 
-// const tokens = [AMZ_ID_1, AMZ_ID_2, AMZ_ID_3, AMZ_ID_4];
 const names = [AMZ_NAME_1, AMZ_NAME_2, AMZ_NAME_3, AMZ_NAME_4];
 
 const fetchDetails = CronJob.from({
@@ -59,7 +59,19 @@ const fetchDetails = CronJob.from({
               itemsFetched = index === items.length - 1
 
               await axios.get(`${baseUrl}/catalog/2022-04-01/items/${item.ASIN}?marketplaceIds=ATVPDKIKX0DER&includedData=attributes,images`,
-                { headers: { 'x-amz-access-token': accessToken } }).then((catalogue) => {
+                { headers: { 'x-amz-access-token': accessToken } }).then(async (catalogue) => {
+
+                  const exist = await db.OrderItems.findOne({
+                    where: {
+                      AmazonOrderId: result?.dataValues?.AmazonOrderId,
+                      ASIN: item.ASIN,
+                    }
+                  })
+
+                  if (exist) {
+                    return
+                  }
+
                   const dimensions = catalogue?.data?.attributes?.item_package_dimensions ?
                     catalogue?.data?.attributes?.item_package_dimensions[0] : null
                   const weight = catalogue?.data?.attributes?.item_package_weight ?
@@ -121,7 +133,8 @@ const fetchDetails = CronJob.from({
       console.log("Job Stopped")
       fetchDetails.stop();
       fetching = false
-      currentNameIndex = 0
+      currentNameIndex = 0;
+     await processOrders()
     }
   },
   start: false,
@@ -172,12 +185,8 @@ module.exports = updateOrders = async () => {
       fetchDetails.start();
     }
     list.forEach(async (order, index) => {
-
-      // console.log('index', index)
-      // console.log('index === list.length - 1 && !fetching', !fetching, index === list.length - 1 && !fetching)
-      // console.log('list and index', list.length, index, index === list.length - 1)
       let tempData = { ...order };
-      // delete tempData.BuyerInfo
+
       await db.Orders.upsert(parseOrder(tempData))
         .then((x) => {
           if (x[0]?.dataValues.itemsFetched == false) {
