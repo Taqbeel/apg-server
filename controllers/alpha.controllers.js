@@ -7,7 +7,7 @@ const convert = require('xml-js');
 const connection = require("../connection.js");
 var FormData = require('form-data');
 var fs = require('fs');
-const { ALPHA_BRODER_URL_REQ, ALPHA_PASS, ALPHA_USER } = require("../config/config.js");
+const { ALPHA_BRODER_URL_REQ, ALPHA_PASS, ALPHA_USER, ALPHA_BRODER_URL_ONLINE } = require("../config/config.js");
 
 exports.getInventory = async (req, res) => {
 
@@ -30,7 +30,7 @@ exports.getInventory = async (req, res) => {
     })
   })
     .catch((error) => {
-      console.log(error)
+      console.log(error?.response?.data)
       res.json({
         status: 'error'
       })
@@ -178,6 +178,9 @@ exports.getInventoryById = async (req, res) => {
   const headers = { 'Authorization': 'Basic ' + Buffer.from('webdev:alpdev').toString("base64") } //this is needed for dev
 
   connection.query(sql, (err, rows) => {
+    console.log('sql', sql)
+    console.log('err', err)
+    console.log('rows', rows)
     if (err instanceof Error || rows?.recordset?.length == 0) {
       console.log(err);
       res.json({ status: 'error' })

@@ -5,7 +5,8 @@ const updateOrders = require("../services/updateOrders")
 // const updateOrders2 = require("../services/updateOrders-2")
 // const updateOrders3 = require("../services/updateOrders-3")
 const { Op } = require('sequelize');
-const updateManualOrders = require("../services/updateManualOrders")
+const updateManualOrders = require("../services/updateManualOrders");
+const { processOrders, fetchInventory } = require("../services/vnOrders");
 
 
 exports.updateOrders = (req, res) => {
@@ -18,8 +19,23 @@ exports.updateOrders = (req, res) => {
   });
 };
 
+exports.processOrders = async (req, res) => {
+  await processOrders();
+  return res.json({
+    status: "done"
+  });
+};
+
+exports.fetchInventoryByPo = async (req, res) => {
+  const { pONumber } = req.query;
+  await fetchInventory(pONumber);
+  return res.json({
+    status: "done"
+  });
+};
+
 exports.getOrders = (req, res) => {
-  const { orderId, orderStatus, orderType, vendorName } = req.query;
+  const { orderId, orderStatus, pONumber, vendorName } = req.query;
 
 
   let where = {};
@@ -29,12 +45,12 @@ exports.getOrders = (req, res) => {
       [Op.like]: `%${orderId}%`
     };
   }
-
-  if (orderType) {
-    where.OrderType = {
-      [Op.iLike]: `%${orderType}%`
+  if (pONumber) {
+    where['$OrderItems.poNumber$'] = {
+      [Op.iLike]: `%${pONumber}%`
     };
   }
+
 
   if (vendorName) {
     where.vendorName = {
