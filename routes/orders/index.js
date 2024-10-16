@@ -4,7 +4,6 @@ const ordersController = require("../../controllers/orders.controllers");
 // updateOrders Unshipped Orders
 routes.get("/updateOrders", ordersController.updateOrders);
 routes.get("/processOrders", ordersController.processOrders);
-routes.get("/fetchInventoryByPo", ordersController.fetchInventoryByPo);
 
 // get Unshipped/Pending Orders
 routes.get("/getOrders", ordersController.getOrders);
