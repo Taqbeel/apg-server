@@ -177,12 +177,15 @@ exports.getInventoryById = async (req, res) => {
   const sql = `SELECT * FROM dbo.tblSkus WHERE [Vendor] = 'AlphaBroder' AND [Sku] = '${sku}'`;
   const headers = { 'Authorization': 'Basic ' + Buffer.from('webdev:alpdev').toString("base64") } //this is needed for dev
 
+  console.log('headers', headers)
   connection.query(sql, (err, rows) => {
-    console.log('sql', sql)
-    console.log('err', err)
-    console.log('rows', rows)
+    // console.log('sql', sql)
+    // console.log('err', err)
+    // console.log('rows', rows)
+      console.log('rows?.recordset?.length == 0-->>>', rows?.recordset?.length == 0);
+      console.log('res', res);
     if (err instanceof Error || rows?.recordset?.length == 0) {
-      console.log(err);
+      console.log('err-->>>', err);
       res.json({ status: 'error' })
     } else {
       let itemNumbers = [];
@@ -193,11 +196,14 @@ exports.getInventoryById = async (req, res) => {
       let APIURL = API_BASE_URL + API_CREDENTIALS + '&in1=' + rows?.recordset[0]?.ItemNumber1 + '&pr=y';
       axios.get(APIURL, { headers })
         .then(async (response) => {
+          console.log('response', response)
           if (response !== null) {
             const xmlData = await convert.xml2json(response.data, {
               compact: true,
               space: 4
             });
+            console.log(xmlData)
+            // console.log('...JSON.parse(xmlData)', ...JSON.parse(xmlData))
             res.json({
               ...JSON.parse(xmlData),
               itemNumbers,
