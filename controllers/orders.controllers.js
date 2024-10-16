@@ -26,14 +26,6 @@ exports.processOrders = async (req, res) => {
   });
 };
 
-exports.fetchInventoryByPo = async (req, res) => {
-  const { pONumber } = req.query;
-  await fetchInventory(pONumber);
-  return res.json({
-    status: "done"
-  });
-};
-
 exports.getOrders = (req, res) => {
   const { orderId, orderStatus, pONumber, vendorName } = req.query;
 
