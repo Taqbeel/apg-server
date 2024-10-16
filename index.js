@@ -33,7 +33,7 @@ const config = {
   "password": CONFIG_PASS, // Database password
   "server": CONFIG_SERVER, // Server IP address
   "port": 1433,
-  // "database": CONFIG_DB_NAME, // Database name
+  "database": CONFIG_DB_NAME, // Database name
   "options": {
     "encrypt": true,
     "trustServerCertificate": true
