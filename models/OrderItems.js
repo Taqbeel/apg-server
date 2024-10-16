@@ -41,13 +41,13 @@ module.exports = (sequelize, DataTypes) => {
     inventoryReceived: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
-    },  
+    },
     trackingNumber: {
       type: DataTypes.STRING,
       allowNull: true
     },
     expectedDelivery: {
-      type: DataTypes.DATE,
+      type: DataTypes.STRING,
       allowNull: true
     },
     poNumber: {
