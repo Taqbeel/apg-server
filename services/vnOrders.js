@@ -50,13 +50,15 @@ const processOrders = async () => {
     for (const order of orders) {
       const sku = order.dataValues.SellerSKU;
       const AmazonOrderId = order.dataValues.AmazonOrderId;
+      const qty = Number(order.dataValues.ProductInfo['NumberOfItems']) * Number(order.dataValues.QuantityOrdered);
+      console.log('qty', qty)
 
       // Fetch inventory for the item
       const res = await getItemInventoryById(sku);
 
       if (res.status === "success") {
         // console.log("res ==>>>>", { ...res, sku });
-        tempInventory.push({ ...res, sku, AmazonOrderId });
+        tempInventory.push({ ...res, sku, AmazonOrderId, qty });
         // res?.data?.itemNumbers.length>0 ? fetchAddtionalOrders(res?.data?.itemNumbers) : null;
         res?.itemNumbers?.forEach((itmNo) => itemNos.push(itmNo));
         count = count + 1;
@@ -67,14 +69,23 @@ const processOrders = async () => {
           itemNos.map(async (item) => await getInventoryByItemNumber(item))
         );
 
-        // console.log("result ====>>>>", result);
 
         if (result?.length > 0) {
-          tempInventory.push(...result);
+          const resultWithQty = result.map((item, index) => ({
+            ...item,
+            qty, // Assign the same qty to each item in result
+          }));
+
+          // console.log("result ====>>>>", resultWithQty);
+
+
+          tempInventory.push(...resultWithQty);
         }
 
       }
     }
+
+    console.log('tempInventory', tempInventory)
 
     for (const item of tempInventory) {
       // console.log(item["inv-balance"]?.item?.whse)
@@ -142,13 +153,13 @@ const getTotalPrice = (item) => {
     parseFloat(
       item["inv-balance"]?.item?._attributes["special-price"]?.slice(1)
     ) || parseFloat(item["inv-balance"]?.item?._attributes["price"]?.slice(1))
-  );
+  ) * item.qty;
 };
 
 
 const findPriorityWarehouse = (priorityWhsList, whs) => {
   for (const priorityGroup of priorityWhsList) {
-    const foundWhs = whs.find(w => priorityGroup.includes(w._attributes.code) && parseInt(w._text) > 0);
+    const foundWhs = whs?.find(w => priorityGroup.includes(w._attributes.code) && parseInt(w._text) > 0);
 
     if (foundWhs) {
       return foundWhs;
@@ -218,7 +229,7 @@ const generatePoNumber = () => {
 
 const createCsvRow = (order, poNumber) => {
   // return `3451167,PO-${poNumber},UPS-Surface,${order["inv-balance"]?.item?._attributes["item-number"]},,${order["inv-balance"]?.item?._attributes["color-code"]},${order["inv-balance"]?.item?._attributes["size-code"]},1,ABC Company,Sohail A Butt,86 lackawanna ave,ste103,woodland Park,NJ,07424,${order.whs?._attributes?.code},,,N,,mtrock6991@gmail.com`;
-  return `3451167,PO-${poNumber},UPS-Surface,${order["inv-balance"]?.item?._attributes["item-number"]},,${order["inv-balance"]?.item?._attributes["color-code"]},${order["inv-balance"]?.item?._attributes["size-code"]},1,ApparelGlobe,Sohail A Butt,86 lackawanna ave,ste103,woodland Park,NJ,07424,${order.whs?._attributes?.code},Y,,Y,,,`;
+  return `3451167,${poNumber},UPS-Surface,${order["inv-balance"]?.item?._attributes["item-number"]},,${order["inv-balance"]?.item?._attributes["color-code"]},${order["inv-balance"]?.item?._attributes["size-code"]},${order.qty},ApparelGlobe,Sohail A Butt,86 lackawanna ave,ste103,woodland Park,NJ,07424,${order.whs?._attributes?.code},Y,,Y,,,`;
   // const orderData = `3451167,PO-${dayjs().format("HH:mm:ss")},UPS-Surface,${inventory[0]["inv-balance"]?.item?._attributes["item-number"]},,${inventory[0]["inv-balance"]?.item?._attributes["color-code"]},${inventory[0]["inv-balance"]?.item?._attributes["size-code"]},1,ABC Company,Sohail A Butt,86 lackawanna ave,,woodland Park,NJ,07424,PH,,,N,,sabdullah369@gmail.com`
 };
 
@@ -321,6 +332,7 @@ const getInventoryByItemNumber = async (itemId) => {
         // console.log(parsedData)
         resolve({
           ...parsedData,
+          itemId
         });
       })
       .catch((error) => {

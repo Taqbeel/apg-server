@@ -7,8 +7,8 @@ const {
   SELLING_URL,
   AMZ_NAME_1,
   AMZ_NAME_2,
-  AMZ_NAME_3,
-  AMZ_NAME_4,
+  // AMZ_NAME_3,
+  // AMZ_NAME_4,
 } = require("../config/config");
 const { processOrders } = require("./vnOrders");
 const amazonAuth = require("./amazonAuth");
@@ -34,7 +34,8 @@ const baseUrl = SELLING_URL;
 let fetching = false;
 let currentNameIndex = 0;
 
-const names = [AMZ_NAME_1, AMZ_NAME_2, AMZ_NAME_3, AMZ_NAME_4];
+// const names = [AMZ_NAME_1, AMZ_NAME_2, AMZ_NAME_3, AMZ_NAME_4];
+const names = [AMZ_NAME_1, AMZ_NAME_2];
 
 const fetchDetails = CronJob.from({
   cronTime: "*/3 * * * * *",
