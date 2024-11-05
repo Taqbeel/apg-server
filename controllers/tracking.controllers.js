@@ -8,7 +8,11 @@ const { SELLING_URL } = require("../config/config");
 const baseUrl = SELLING_URL
 
 exports.tracking = async (req, res) => {
-  const tokenData = await getRefreshToken();
+
+  const tokenData = await getRefreshToken(req.headers.vendorname);
+
+
+  // const tokenData = await getRefreshToken();
   const result = await Orders.findOne({
     where: {
       AmazonOrderId: req.headers.id
@@ -18,6 +22,12 @@ exports.tracking = async (req, res) => {
       model: OrderShipment,
     }]
   });
+
+
+  if (!result.dataValues.OrderShipment) {
+    return res.json({ status: "error", result: 'No data found' });
+  }
+
   const config = {
     method: 'get',
     url: baseUrl + `/shipping/v2/tracking?trackingId=${result.dataValues.OrderShipment.dataValues.trackingId}&carrierId=USPS&`,
@@ -45,7 +55,7 @@ exports.bulkTracking = async (req, res) => {
 
   const result = await Orders.findAll({
     where: {
-      status: 'transit'
+      status: 'Transit'
     },
     attributes: ['id'],
     include: [

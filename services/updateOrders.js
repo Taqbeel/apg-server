@@ -17,6 +17,7 @@ const delay = (n) => new Promise((resolve) => setTimeout(resolve, n));
 
 const job = new CronJob(
   "0 */30 * * * *",
+  // "*/5 * * * *",
   async () => {
     console.log("You will see this message every 30 minutes");
     await amazonAuth();
