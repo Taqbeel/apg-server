@@ -53,7 +53,19 @@ module.exports = (sequelize, DataTypes) => {
     poNumber: {
       type: DataTypes.STRING,
       allowNull: true
-    }
+    },
+    itemColors: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    itemNumbers: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    itemSize: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
   })
   return OrderItems;
 }

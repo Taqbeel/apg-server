@@ -12,6 +12,7 @@ const {
 } = require("../config/config");
 const { processOrders } = require("./vnOrders");
 const amazonAuth = require("./amazonAuth");
+const connection = require("../connection.js");
 
 const delay = (n) => new Promise((resolve) => setTimeout(resolve, n));
 
@@ -37,6 +38,34 @@ let currentNameIndex = 0;
 
 // const names = [AMZ_NAME_1, AMZ_NAME_2, AMZ_NAME_3, AMZ_NAME_4];
 const names = [AMZ_NAME_1, AMZ_NAME_2];
+
+
+
+
+const getInventoryData = async (sql, connection) => {
+  return new Promise((resolve, reject) => {
+    connection.query(sql, (err, rows) => {
+      if (err) {
+        console.log("SQL error", err);
+        return reject(err);
+      }
+
+      if (rows?.recordset?.length === 0) {
+        resolve({});
+      } else {
+        const itemNumber = `${rows.recordset[0]?.ItemNumber1}, ${rows.recordset[0]?.ItemNumber2}, ${rows.recordset[0]?.ItemNumber3}, ${rows.recordset[0]?.ItemNumber4}`;
+        const itemColor = `${rows.recordset[0]?.ColorName1}, ${rows.recordset[0]?.ColorName2}, ${rows.recordset[0]?.ColorName3}, ${rows.recordset[0]?.ColorName4}`;
+        const itemSize = rows.recordset[0]?.Size;
+        resolve({ itemNumber, itemColor, itemSize });
+      }
+    });
+  });
+};
+
+
+
+
+
 
 const fetchDetails = CronJob.from({
   cronTime: "*/3 * * * * *",
@@ -76,6 +105,13 @@ const fetchDetails = CronJob.from({
             items.forEach(async (item, index) => {
               itemsFetched = index === items.length - 1;
 
+
+              const sql = `SELECT * FROM dbo.tblSkus WHERE [Vendor] = 'AlphaBroder' AND [Sku] = '${item?.SellerSKU}'`;
+
+
+              const inventoryData = await getInventoryData(sql, connection);
+
+
               await axios
                 .get(
                   `${baseUrl}/catalog/2022-04-01/items/${item.ASIN}?marketplaceIds=ATVPDKIKX0DER&includedData=attributes,images`,
@@ -112,6 +148,11 @@ const fetchDetails = CronJob.from({
                     dimensions: dimensions,
                     weight: weight,
                     AmazonOrderId: result?.dataValues?.AmazonOrderId,
+
+
+                    itemColors: inventoryData?.itemColor || null,
+                    itemNumbers: inventoryData?.itemNumber || null,
+                    itemSize: inventoryData?.itemSize || null,
                   }).catch((err) => {
                     console.log(
                       "=<<<<<ERROROROROORORRORORO",
