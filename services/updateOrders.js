@@ -206,7 +206,7 @@ const fetchDetails = CronJob.from({
       fetchDetails.stop();
       fetching = false;
       currentNameIndex = 0;
-      await processOrders();
+      // await processOrders();
     }
   },
   start: false,
