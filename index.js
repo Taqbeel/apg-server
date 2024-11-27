@@ -21,7 +21,7 @@ const { Users, Orders, OrderItems, OrderShipment } = require("./associations/ord
 const { AlbPurchaseOrder, PoItems, AlbShippingBox, AlbPoCompleted } = require("./associations/poAssociations");
 const { CONFIG_USER, CONFIG_PASS, CONFIG_SERVER, CONFIG_DB_NAME, HOST_PORT, } = require("./config/config.js");
 
-app.use(cors());
+app.use(cors({ origin: '*' }));
 app.use(morgan('tiny'));
 app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
 app.use(bodyParser.json({ limit: '100mb', extended: true }));
